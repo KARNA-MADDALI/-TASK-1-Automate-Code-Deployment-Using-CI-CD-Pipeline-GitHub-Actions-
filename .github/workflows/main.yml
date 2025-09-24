@@ -38,18 +38,24 @@ jobs:
       # 6️⃣ Build Docker image
       - name: Build Docker image
         run: |
-          IMAGE_NAME="${{ secrets.DOCKERHUB_USERNAME }}/nodejs-demo-app"
+          # Trim secret to remove any extra spaces or newlines
+          DOCKER_USER="$(echo -n '${{ secrets.DOCKERHUB_USERNAME }}' | tr -d '\n')"
+          IMAGE_NAME="$DOCKER_USER/nodejs-demo-app"
+          echo "Building Docker image: $IMAGE_NAME:latest"
           docker build -t "$IMAGE_NAME:latest" .
 
-      # 7️⃣ Optional: Tag image with commit SHA
+      # 7️⃣ Tag image with commit SHA
       - name: Tag Docker image with commit SHA
         run: |
-          IMAGE_NAME="${{ secrets.DOCKERHUB_USERNAME }}/nodejs-demo-app"
+          DOCKER_USER="$(echo -n '${{ secrets.DOCKERHUB_USERNAME }}' | tr -d '\n')"
+          IMAGE_NAME="$DOCKER_USER/nodejs-demo-app"
           docker tag "$IMAGE_NAME:latest" "$IMAGE_NAME:${{ github.sha }}"
 
       # 8️⃣ Push Docker images
       - name: Push Docker images
         run: |
-          IMAGE_NAME="${{ secrets.DOCKERHUB_USERNAME }}/nodejs-demo-app"
+          DOCKER_USER="$(echo -n '${{ secrets.DOCKERHUB_USERNAME }}' | tr -d '\n')"
+          IMAGE_NAME="$DOCKER_USER/nodejs-demo-app"
           docker push "$IMAGE_NAME:latest"
           docker push "$IMAGE_NAME:${{ github.sha }}"
+
