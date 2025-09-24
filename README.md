@@ -59,7 +59,7 @@ nodejs-demo-app/
 ---
 
 ## Screenshots
- <img src="./images/screenshot.png" alt="screenshot" width="400"/>
+ <img src="./images/result.png" alt="screenshot" width="400"/>
 
 ---
 
@@ -80,6 +80,9 @@ nodejs-demo-app/
 - Automatic deployment to AWS cloud via SSH.  
 - Using GitHub Actions with secrets and self-hosted or remote runners.  
 - Managing Docker containers on a cloud server.
+
+  ## Screenshots
+ <img src="./images/pipeline.png" alt="screenshot" width="400"/>
 
 ---
 
