@@ -10,32 +10,46 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # 2️⃣ Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
+      # 3️⃣ Install dependencies
       - name: Install dependencies
         run: npm install
 
+      # 4️⃣ Run tests
       - name: Run tests
         run: npm test
 
+      # 5️⃣ Docker login
       - name: Docker login
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # 6️⃣ Build Docker image
       - name: Build Docker image
         run: |
           IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/nodejs-demo-app
           docker build -t $IMAGE_NAME:latest .
 
+      # 7️⃣ Tag image with commit SHA
+      - name: Tag Docker image with commit SHA
+        run: |
+          IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/nodejs-demo-app
+          docker tag $IMAGE_NAME:latest $IMAGE_NAME:${{ github.sha }}
+
+      # 8️⃣ Push both tags to DockerHub
       - name: Push Docker image
         run: |
           IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/nodejs-demo-app
           docker push $IMAGE_NAME:latest
+          docker push $IMAGE_NAME:${{ github.sha }}
